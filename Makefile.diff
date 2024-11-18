@@ -1,0 +1,55 @@
+diff --git a/Makefile b/Makefile
+index 044e169..c8214d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -23,6 +23,9 @@ pgbouncer_SOURCES = \
+ 	src/server.c \
+ 	src/stats.c \
+ 	src/system.c \
++	src/pycall.c \
++	src/route_connection.c \
++	src/rewrite_query.c \
+ 	src/takeover.c \
+ 	src/util.c \
+ 	src/varcache.c \
+@@ -53,6 +56,9 @@ pgbouncer_SOURCES = \
+ 	include/server.h \
+ 	include/stats.h \
+ 	include/system.h \
++	include/pycall.h \
++	include/route_connection.h \
++	include/rewrite_query.h \
+ 	include/takeover.h \
+ 	include/util.h \
+ 	include/varcache.h \
+@@ -69,7 +75,8 @@ pgbouncer_SOURCES = \
+ 	include/common/uthash_lowercase.h
+ 
+ UTHASH = uthash
+-pgbouncer_CPPFLAGS = -Iinclude $(CARES_CFLAGS) $(LIBEVENT_CFLAGS) $(TLS_CPPFLAGS)
++python_CPPFLAGS = -I/usr/include/python3.9 -I/usr/include/python3.9
++pgbouncer_CPPFLAGS = -Iinclude $(CARES_CFLAGS) $(LIBEVENT_CFLAGS) $(TLS_CPPFLAGS) $(python_CPPFLAGS)
+ pgbouncer_CPPFLAGS += -I$(UTHASH)/src
+ 
+ # include libusual sources directly
+@@ -82,7 +89,8 @@ dist_doc_DATA = README.md NEWS.md \
+ 	etc/pgbouncer.ini \
+ 	etc/pgbouncer.service \
+ 	etc/pgbouncer.socket \
+-	etc/userlist.txt
++	etc/userlist.txt \
++	etc/pgbouncer.ini \
+ 
+ DISTCLEANFILES = config.mak config.status lib/usual/config.h config.log
+ 
+@@ -113,8 +121,9 @@ LIBUSUAL_DIST = $(filter-out %/config.h, $(sort $(wildcard \
+ UTHASH_DIST = $(UTHASH)/src/uthash.h \
+               $(UTHASH)/LICENSE
+ 
++python_LDFLAGS = -lpthread -ldl -lutil -lm -lpython3.9 -Xlinker -export-dynamic
+ pgbouncer_LDFLAGS := $(TLS_LDFLAGS)
+-pgbouncer_LDADD := $(CARES_LIBS) $(LIBEVENT_LIBS) $(TLS_LIBS) $(LIBS)
++pgbouncer_LDADD := $(CARES_LIBS) $(LIBEVENT_LIBS) $(TLS_LIBS) $(LIBS) $(python_LDFLAGS)
+ LIBS :=
+ 
+ #

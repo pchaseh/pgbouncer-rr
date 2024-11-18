@@ -1,0 +1,28 @@
+diff --git a/include/bouncer.h b/include/bouncer.h
+index 36315df..fb736bf 100644
+--- a/include/bouncer.h
++++ b/include/bouncer.h
+@@ -165,6 +165,11 @@ typedef enum ReplicationType ReplicationType;
+ 
+ extern int cf_sbuf_len;
+ 
++/* pgbouncer-rr extensions */
++#include "pycall.h"
++#include "route_connection.h"
++#include "rewrite_query.h"
++
+ #include "util.h"
+ #include "iobuf.h"
+ #include "sbuf.h"
+@@ -834,6 +839,11 @@ extern int cf_log_disconnections;
+ extern int cf_log_pooler_errors;
+ extern int cf_application_name_add_host;
+ 
++/* pgbouncer-rr extensions */
++extern char *cf_routing_rules_py_module_file;
++extern char *cf_rewrite_query_py_module_file;
++extern char *cf_rewrite_query_disconnect_on_failure;
++
+ extern int cf_client_tls_sslmode;
+ extern char *cf_client_tls_protocols;
+ extern char *cf_client_tls_ca_file;
